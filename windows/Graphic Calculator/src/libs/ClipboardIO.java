@@ -42,12 +42,14 @@ public class ClipboardIO implements ClipboardOwner {          // К классу
      * в коде их надо учитывать:
      * </p>
      *
-     * <tt><p>ClipboardIO io = new ClipboardIO();</p>
-     * <p>try {</p>
-     * <p>    System.out.println(io.getText());    // Пробуем получить доступ</p>
-     * <p>} catch (IOException | UnsupportedFlavorException e1) {</p>
-     * <p>    System.out.println("Ошибка при доступе");</p>
-     * <p>}</p></tt>
+     * <blockquote><pre>
+     *     ClipboardIO io = new ClipboardIO();
+     *     try {
+     *         System.out.println(io.getText());    // Пробуем получить доступ
+     *     } catch (IOException | UnsupportedFlavorException e1) {
+     *         System.out.println("Ошибка при доступе");
+     *     }
+     * </blockquote></pre>
      *
      * @return текст, записаный в буфере.
      * @throws IOException ошибка в доступе
