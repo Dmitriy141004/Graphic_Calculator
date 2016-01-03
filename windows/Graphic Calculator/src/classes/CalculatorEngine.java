@@ -27,7 +27,7 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
 
     Calculator parent;                  // Ссылка на графический класс
     String displayText = "";            // Текст на десплее
-    String actionButtons[] = new String[]{"+", "-", "/", "*", "="};    // Текст кнопок с действиями, потом увидите зачем это надо
+    String actionButtons[] = new String[]{"+", "-", "/", "*", "=", "^"};    // Текст кнопок с действиями, потом увидите зачем это надо
     String memory = "";                          // Текст в памяти
     CalculatorMath math = new CalculatorMath();  // CalculatorMath - это класс, который считает математическое выражение из строки
     boolean resultCounted = false;               // Посчитан ли результат? (если правда, то надо при нажатии кнопки обнулить Text Field

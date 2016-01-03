@@ -131,19 +131,20 @@ public class CalculatorMath {
                             }
                         }
                         calculate(StringUtils.charAryToString(workingText));
+                    } else {
+                        for (int j = 0; j < 3; j++) workingText = ArrayUtils.deleteItem(workingText, workingText.length - 1);
+                        try {
+                            currentResult = Double.parseDouble(StringUtils.charAryToString(workingText));
+                        } catch (NumberFormatException e1) {
+                            throw new CustomException("Converting Error",
+                                    "Converting error appeared,\nwhen I converted values.");
+                        }
                     }
 
                     break;
 
                 }
             }
-        }
-        for (int i = 0; i < 3; i++) workingText = ArrayUtils.deleteItem(workingText, workingText.length - 1);
-        try {
-            currentResult = Double.parseDouble(StringUtils.charAryToString(workingText));
-        } catch (NumberFormatException e1) {
-            throw new CustomException("Converting Error",
-                    "Converting error appeared,\nwhen I converted values.");
         }
     }
 
