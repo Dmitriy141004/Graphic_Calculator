@@ -413,7 +413,7 @@ public class Calculator {
         calc.launchGraphics();
 
 
-        calc.variableMath.knownVariables.put("abc", "1");
+        calc.variableMath.knownVariables.put("abc1", "123");
         calc.variableMath.knownVariables.put("var", "2");
         calc.variableMath.knownVariables.put("bigger_variable", "3");
         calc.variableMath.knownVariables.put("clone", "4");

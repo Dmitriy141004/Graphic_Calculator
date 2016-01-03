@@ -90,6 +90,8 @@ public class CalculatorVariables {
             char symbol = text.charAt(index);         // Текущий символ
             int endIndex;                             // Индекс конца имени переменной
 
+            // Если символ - цифра, для безопасности выходим
+            if (ArrayUtils.array_has(new char[] {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}, symbol)) continue;
             if (anyVariableHasChar(symbol)) {         // Проверка на наличие символа в любой переменной
                 //                                       Скорее всего, сейчас программа нашла переменную
 
@@ -103,26 +105,28 @@ public class CalculatorVariables {
                 String beforeInserted = text.substring(0, index);       // Часть до вставляемого значения
                 String inserted;                                             // Вставляемое значение
 
-                // Установка вставляемого значение. Я использовал try/catch блок, чтоб если переменная не объявлена
+                // Установка вставляемого значение. Я использовал if-конструкцию, чтоб если переменная не объявлена
                 // (метод get возвращает null), надо сообщить об ошибке
-                try {
-                    inserted = knownVariables.get(text.substring(index, endIndex));
-                } catch (NullPointerException e1) {
-                    throw new CustomException("VariableNotExists Error", "Variable \"" + text.substring(index, endIndex) +
-                            "\" not exists.\nPlease, declare this variable.");
-                }
+                inserted = knownVariables.get(text.substring(index, endIndex));
+                if (inserted == null) throw new CustomException("VariableNotExists Error", "Variable \"" + text.substring(index, endIndex) +
+                        "\" not exists.\nPlease, declare this variable.");
+
                 String afterInserted = text.substring(endIndex, text.length());    // Часть после вставляемого значения
 
                 text = beforeInserted + inserted + afterInserted;    // Объеденяем всё в одно выражение (до + значение + после)
 
                 index = -1;     // Мы нашли конец, значит можно обнулить главный цикл. Сделано для избежания багов
 
-                if (!normalLaunch) break;                            // При ненормальном запуске выходим из цикла
+                if (!normalLaunch) {
+                    break;                            // При ненормальном запуске выходим из цикла
+                }
             }
         }
 
         boolean needToRestart = false;                // Нужно ли перезапустить? (по-умолчанию - false)
         for (char charNow : text.toCharArray()) {     // Пробегаем по всем символам в выражении
+            // Если символ - цифра, для безопасности выходим
+            if (ArrayUtils.array_has(new char[] {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}, charNow)) continue;
             if (anyVariableHasChar(charNow)) {
                 needToRestart = true;     // Если любоя из переменных имеет данный символ -
                 //                           Значит надо перезапустить
@@ -168,6 +172,8 @@ public class CalculatorVariables {
         // Добавляет переменную и её значение
         for (int i = 0; i < text.length(); i++) {
 
+            // Если символ - цифра, для безопасности выходим
+            if (ArrayUtils.array_has(new char[] {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}, text.charAt(i))) continue;
             if (anyVariableHasChar(text.charAt(i))) {
                 int endIndex;
                 // Поиск конца переменной
