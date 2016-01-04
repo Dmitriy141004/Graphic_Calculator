@@ -44,10 +44,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CalculatorEngine.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CalculatorEngine.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/classes/CalculatorEngine.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.76554173">
+            <state vertical-scroll-proportion="0.0">
               <caret line="187" column="42" selection-start-line="187" selection-start-column="42" selection-end-line="187" selection-end-column="42" />
               <folding />
             </state>
@@ -74,11 +74,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CalculatorMath.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CalculatorMath.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/classes/CalculatorMath.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="260" column="69" selection-start-line="260" selection-start-column="69" selection-end-line="260" selection-end-column="69" />
+            <state vertical-scroll-proportion="-0.21136767">
+              <caret line="263" column="31" selection-start-line="263" selection-start-column="31" selection-end-line="263" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -166,8 +166,8 @@
         <option value="$PROJECT_DIR$/src/classes/CalculatorVariables.java" />
         <option value="$PROJECT_DIR$/src/classes/JCalculatorDialogs.java" />
         <option value="$PROJECT_DIR$/src/classes/Calculator.java" />
-        <option value="$PROJECT_DIR$/src/classes/CalculatorMath.java" />
         <option value="$PROJECT_DIR$/src/classes/CalculatorEngine.java" />
+        <option value="$PROJECT_DIR$/src/classes/CalculatorMath.java" />
       </list>
     </option>
   </component>
@@ -1186,18 +1186,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/classes/CalculatorMath.java">
+    <entry file="file://$PROJECT_DIR$/src/classes/CalculatorEngine.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="260" column="69" selection-start-line="260" selection-start-column="69" selection-end-line="260" selection-end-column="69" />
+          <caret line="187" column="42" selection-start-line="187" selection-start-column="42" selection-end-line="187" selection-end-column="42" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/classes/CalculatorEngine.java">
+    <entry file="file://$PROJECT_DIR$/src/classes/CalculatorMath.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.76554173">
-          <caret line="187" column="42" selection-start-line="187" selection-start-column="42" selection-end-line="187" selection-end-column="42" />
+        <state vertical-scroll-proportion="-0.21136767">
+          <caret line="263" column="31" selection-start-line="263" selection-start-column="31" selection-end-line="263" selection-end-column="31" />
           <folding />
         </state>
       </provider>

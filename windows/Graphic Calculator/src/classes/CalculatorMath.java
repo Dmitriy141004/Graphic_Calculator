@@ -258,29 +258,10 @@ public class CalculatorMath {
     }
 
     public String formatInput(String input) {
-        ArrayList<String> itemsOfExpression = splitExpression(input);
-
-        String out = "";
-        for (String item : itemsOfExpression) {
-            if (ArrayUtils.array_has(actions, item.charAt(item.length() - 1)) || Objects.equals(item, "=")) {
-                out += " ";
-                out += item;
-                out += " ";
-            } else out += item;
-        }
-
-        if (out.charAt(0) == '-') out = " " + out;
-
-        return out;
-    }
-
-    public char lastChar(String string) { return string.charAt(string.length() - 1); }
-
-    public ArrayList<String> splitExpression(String expression) {
-        if (expression.charAt(0) == '-') expression = " " + expression;
+        if (input.charAt(0) == '-') input = " " + input;
         ArrayList<String> itemsOfExpression = new ArrayList<>();
-        for (int i = 0; i < expression.length(); i++) {
-            char symbol = expression.charAt(i);
+        for (int i = 0; i < input.length(); i++) {
+            char symbol = input.charAt(i);
             if (ArrayUtils.array_has(actions, symbol) || symbol == '=') {
                 itemsOfExpression.add(Character.toString(symbol));
             } else if (symbol != ' ') {
@@ -309,6 +290,20 @@ public class CalculatorMath {
                 }
             }
         }
-        return itemsOfExpression;
+
+        String out = "";
+        for (String item : itemsOfExpression) {
+            if (ArrayUtils.array_has(actions, item.charAt(item.length() - 1)) || Objects.equals(item, "=")) {
+                out += " ";
+                out += item;
+                out += " ";
+            } else out += item;
+        }
+
+        if (out.charAt(0) == '-') out = " " + out;
+
+        return out;
     }
+
+    public char lastChar(String string) { return string.charAt(string.length() - 1); }
 }
