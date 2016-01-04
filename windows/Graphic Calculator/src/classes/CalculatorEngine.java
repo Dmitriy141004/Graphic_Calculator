@@ -27,7 +27,7 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
 
     Calculator parent;                  // Ссылка на графический класс
     String displayText = "";            // Текст на десплее
-    String actionButtons[] = new String[]{"+", "-", "/", "*", "=", "^"};    // Текст кнопок с действиями, потом увидите зачем это надо
+    String actionButtons[] = new String[]{"+", "-", "/", "*", "="};    // Текст кнопок с действиями, потом увидите зачем это надо
     String memory = "";                          // Текст в памяти
     CalculatorMath math = new CalculatorMath();  // CalculatorMath - это класс, который считает математическое выражение из строки
     boolean resultCounted = false;               // Посчитан ли результат? (если правда, то надо при нажатии кнопки обнулить Text Field
@@ -125,7 +125,7 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
                 displayText += (" " + clickedButtonLabel + " ");        // То надо его прибавить его, и сделать отступы сзади и спереди
                 needOnlyNumber = true;
                 needToFormat = false;
-            }
+            } else if (displayText.isEmpty()) needToFormat = false;
         } else {                        // Иначе, это цифра или спец. знак/кнопка
 
             switch (clickedButtonLabel) {      // РЫЧАГ НА ЦИФРЫ И СПЕЦ. КНОПКИ/ЗНАКИ
@@ -175,15 +175,20 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
                     break;
 
                 case "x\u00B2":              // Если "x ^ 2" (x в квадрате)
-                    displayText += " ^ 2";
+                    if (!needOnlyNumber) displayText += " ^ 2";
+                    else if (displayText.isEmpty()) needToFormat = false;
                     break;
 
                 case "x\u00B3":              // Если "x ^ 3" (y в кубе)
-                    displayText += " ^ 3";
+                    if (!needOnlyNumber) displayText += " ^ 3";
+                    else if (displayText.isEmpty()) needToFormat = false;
                     break;
 
                 case "x\u207F":              // Если "x ^ n" (x в степени n)
-                    displayText += " ^ ";
+                    if (!needOnlyNumber) {
+                        displayText += " ^ ";
+                        needOnlyNumber = true;
+                    } else if (displayText.isEmpty()) needToFormat = false;
                     break;
 
                 default:                   // Иначе... (это цифра)
