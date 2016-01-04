@@ -405,7 +405,6 @@ public class Calculator {
         buttonPowerXY.addActionListener(calcEngine);     // Степень n
 
         displayField.addFocusListener(calcEngine);       // Focus Listener для Text Field'а
-
     }
 
     public static void main(String[] args) {

@@ -133,26 +133,37 @@ public class JCalculatorDialogs {
                 if (variableMath.knownVariables.containsKey(nameField.getText())) {
                     errorMessage(new CustomException("VariableNameExists Error",
                             "Name of a new variable exists,\nso, please, enter anything else."));
+                    nameField.setText("");
+                    nameField.requestFocus();
                     return;
                 } else if (nameField.getText().contains(" ")) {
                     errorMessage(new CustomException("InvalidName Error",
                             "Please, don't use spaces in names.\nYou can change them with underscores (\"_\")."));
+                    for (char symbol : nameField.getText().toCharArray()) {
+                        if (symbol == ' ') nameField.setText(nameField.getText().replace(symbol, '_'));
+                    }
+                    nameField.requestFocus();
                     return;
                 } else if (CalculatorMath.ary1_has_ary2(nameField.getText().toCharArray(), NON_VARIABLE_CHARS)) {
                     errorMessage(new CustomException("InvalidName Error",
                             "Please, don't use charters like parts of \nnumbers, action and brackets in name of variable."));
+                    nameField.setText("");
+                    nameField.requestFocus();
                     return;
                 }
 
                 variableMath.knownVariables.put(nameField.getText(), valueField.getText());
             } else if (nameField.getText().isEmpty() && !valueField.getText().isEmpty()){
                 errorMessage(new CustomException("NothingEntered Error", "Please, enter data in name field."));
+                nameField.requestFocus();
                 return;
             } else if (!nameField.getText().isEmpty() && valueField.getText().isEmpty()){
                 errorMessage(new CustomException("NothingEntered Error", "Please, enter data in value field."));
+                valueField.requestFocus();
                 return;
             } else if (nameField.getText().isEmpty() && valueField.getText().isEmpty()) {
                 errorMessage(new CustomException("NothingEntered Error", "Please, enter data in name and value field."));
+                nameField.requestFocus();
                 return;
             }
 
@@ -258,6 +269,7 @@ public class JCalculatorDialogs {
                 else {
                     errorMessage(new CustomException("VariableNotSelected Error",
                             "Please, enter new value of variable."));
+                    newValueField.requestFocus();
                     return;
                 }
             } else {
