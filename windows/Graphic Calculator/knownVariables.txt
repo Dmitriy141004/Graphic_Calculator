@@ -1,0 +1,8 @@
+"some"="123"
+"abc"="1"
+"long_var"="expression_var + something"
+"var"="2"
+"bigger_variable"="3"
+"clone"="4"
+"expression_var"="abc + var"
+"something"="bigger_variable - clone"

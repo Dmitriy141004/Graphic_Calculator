@@ -14,7 +14,7 @@ public class JCalculatorDialogs {
     public static final Font ERROR_MESSAGE_FONT = new Font(Calculator.MAIN_FONT_NAME, Font.PLAIN, 18);
     public static final Dimension DEFAULT_LIST_SIZE = new Dimension(260, 220);
     public static final Font LIST_FONT = new Font(Calculator.MAIN_FONT_NAME, Font.PLAIN, 17);
-    public static final char[] NON_VARIABLE_CHARS = new char[] {'.', '+', '-', '/', '*', '^', '(', ')'};
+    public static final char[] NON_VARIABLE_CHARS = new char[] {'.', '+', '-', '/', '*', '^', '(', ')', '\"'};
     private static String selectedVariableForView = "";
 
 
@@ -146,7 +146,7 @@ public class JCalculatorDialogs {
                     return;
                 } else if (CalculatorMath.ary1_has_ary2(nameField.getText().toCharArray(), NON_VARIABLE_CHARS)) {
                     errorMessage(new CustomException("InvalidName Error",
-                            "Please, don't use charters like parts of \nnumbers, action and brackets in name of variable."));
+                            "Please, don't use charters like parts of \nnumbers, actions, brackets and quotes in name of variable."));
                     nameField.setText("");
                     nameField.requestFocus();
                     return;
@@ -204,9 +204,7 @@ public class JCalculatorDialogs {
         okButton.setFont(DEFAULT_FONT);
 
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(e -> {
-            disposeFrame(frame);
-        });
+        cancelButton.addActionListener(e -> disposeFrame(frame));
         cancelButton.setFont(DEFAULT_FONT);
 
         setOkAndCancelButtons(panel, okButton, cancelButton);

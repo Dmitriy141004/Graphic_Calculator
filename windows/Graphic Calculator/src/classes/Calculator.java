@@ -8,7 +8,9 @@ import java.awt.*;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.*;
 
 /**
  * <h1><b>======= Calculator =======</b></h1>
@@ -130,7 +132,7 @@ public class Calculator {
         fileMenu.addSeparator();
         fileMenu.add(exitItem);                  // Кнопка "Выход"
 
-        exitItem.addActionListener(e -> System.exit(0));      // При нажатии на кнопку "Выход",
+        exitItem.addActionListener(e -> exit());      // При нажатии на кнопку "Выход",
         //                                                       Выходим с кодом "0"
         exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));    // Выход на горячую клавишу Escape
 
@@ -371,8 +373,15 @@ public class Calculator {
         frame.setJMenuBar(menuBar);                 // Добавление рядка меню
         frame.pack();                               // "Запакиваем" окно - автоматически создавая нужный размер
         frame.setVisible(true);                     // Делаем окно видимым
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);    // Операция выхода:
-        //                                             Выход из программы, при клике на кнопку выхода, в рядке заголовка
+        // Операция выхода:
+        // Выход из программы, при клике на кнопку выхода, в рядке заголовка + сохранение данных
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                exit();
+            }
+        });
 
         frame.setTitle("Calculator");               // Установка названия окна (это в рядке заголовка)
         frame.setResizable(false);                  // И теперь, окно нельзя увеличить или уменьшить
@@ -410,18 +419,128 @@ public class Calculator {
     public static void main(String[] args) {
         Calculator calc = new Calculator();            // Создание и запуск нового калькулятора
         calc.launchGraphics();
+        calc.loadVariables();
+    }
 
+    /** <h1><b>======= Метод для загрузки переменных =======</b></h1>
+     * <p>Использует обычную конструкцию с буфером, для повышения скорости эфективности.</p>
+     */
+    public void loadVariables() {
+        variableMath.knownVariables.clear();
 
-        calc.variableMath.knownVariables.put("abc1", "123");
-        calc.variableMath.knownVariables.put("var", "2");
-        calc.variableMath.knownVariables.put("bigger_variable", "3");
-        calc.variableMath.knownVariables.put("clone", "4");
-        calc.variableMath.knownVariables.put("something", "bigger_variable - clone");
-        calc.variableMath.knownVariables.put("expression_var", "abc + var");
-        calc.variableMath.knownVariables.put("long_var", "expression_var + something");
+        FileReader myFile = null;
+        BufferedReader myBuffer = null;
 
-//        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-//        Font[] fontNames = graphicsEnvironment.getAllFonts();
-//        for (Font s : fontNames) System.out.println(s.getName());
+        try {
+            myFile = new FileReader("knownVariables.txt");
+            myBuffer = new BufferedReader(myFile);
+
+            while (true) {
+                String line = myBuffer.readLine();
+                if (line == null) break;
+
+                boolean start = false;
+                boolean writeVarName = true;
+                String varName = "";
+                String varValue = "";
+                for (int i = 0; i < line.length(); i++) {
+                    char symbol = line.charAt(i);
+                    if (!start && symbol == '=') writeVarName = false;
+                    if (symbol == '\"') {
+                        start = !start;
+                        continue;
+                    }
+                    if (start) {
+                        if (writeVarName) {
+                            varName += symbol;
+                        } else {
+                            varValue += symbol;
+                        }
+                    }
+                }
+                variableMath.knownVariables.put(varName, varValue);
+            }
+        } catch (FileNotFoundException e1) {  // На случай исключения FileNotFoundException (файл не найден)
+            JCalculatorDialogs.errorMessage(new CustomException("FileNotFound Error",
+                    "I can't find file to load variables,\nmaybe it not exists or you moved it to another place."));
+            e1.printStackTrace();
+        } catch (IOException e1) {            // На случай исключения IOException (ошибка доступа)
+            e1.printStackTrace();
+        } finally {
+            try {
+                if (myBuffer != null) myBuffer.close();
+                if (myFile != null) myFile.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    /** <h1><b>======= Метод для сохранения переменных =======</b></h1>
+     * <p>Использует обычную конструкцию с буфером, для повышения скорости эфективности.</p>
+     */
+    public void saveVariables() throws CustomException {
+        FileWriter myFile = null;            // Класс записи в файл/Класс с файлом (фактически - ссылка/путь к файлу)
+        BufferedWriter myBuffer = null;      // Буфер для записи в файл
+
+        try {
+            if (!new File("knownVariables.txt").exists()) throw new CustomException("FileNotFound Error",
+                    "I can't find file to save known variables,\nmaybe it not exists or you moved it to another place.");
+            myFile = new FileWriter("knownVariables.txt", false);         // Открываем файл
+            myBuffer = new BufferedWriter(myFile);                        // Открываем буфер
+
+            for (String data : variableMath.knownVariables.keySet()) {    // Проход по всем переменным
+                // Запись по такому шаблону: "(имя_переменной)"="(значение переменной)"
+                myBuffer.write("\"" + data + "\"=\"" + variableMath.knownVariables.get(data) + "\"\n");
+            }
+        } catch (FileNotFoundException e1) {  // На случай исключения FileNotFoundException (файл не найден)
+            e1.printStackTrace();
+            throw new CustomException("FileNotFound Error",
+                    "I can't find file to save known variables,\nmaybe it not exists or you moved it to another place.");
+        } catch (IOException e1) {            // На случай исключения IOException (ошибка доступа)
+            e1.printStackTrace();
+        } finally {                  // Заканчиваем запись, сработает в любом случае
+            try {
+                if (myBuffer != null) {
+                    myBuffer.flush();    // "Сливаем" буфер
+                    myBuffer.close();    // Закрытие буфера
+                }
+                if (myFile != null) myFile.close();      // Закрытие файла
+            } catch (IOException e1) {    // На случай исключения IOException ил любого дочернего от IOException
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    /** <h1><b>======= Метод для правильного выхода =======</b></h1>
+     * <p>При выходе из программы надо сохранить известные переменные,
+     * а также, так как не возникло никаких ошибок - выходим с кодом выхода "0".
+     * Если файла не сыществует - сообщает об ошибке, и спрашивает:
+     * "Выйти без сохранения или создать этот файл?".</p>
+     */
+    public void exit() {
+        try {
+            saveVariables();      // Сохранение переменных
+            System.exit(0);       // Выход
+        } catch (CustomException e1) {
+            Object[] options = {"Exit without save", "Create this file"};
+            String fullMessage = e1.getMessage();
+            String nameOfException = fullMessage.substring(0, fullMessage.indexOf("#"));
+            String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());
+
+            UIManager.put("OptionPane.messageFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
+            UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
+
+            int reply = JOptionPane.showOptionDialog(null, nameOfException, exceptionDesc, JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.ERROR_MESSAGE, null, options, options[1]);
+            if (reply == 0) System.exit(0);
+            else if (reply == 1) {
+                try {
+                    new File("knownVariables.txt").createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

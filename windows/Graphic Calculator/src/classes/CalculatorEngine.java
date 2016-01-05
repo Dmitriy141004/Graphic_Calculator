@@ -3,7 +3,6 @@ package classes;
 import libs.*;
 import libs.exceptions.CustomException;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.util.Objects;
 import javax.swing.*;
@@ -216,8 +215,8 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
         String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());   // Описание ошибки
 
         //             Настройка шрифтов информационного окна
-        UIManager.put("OptionPane.messageFont", new Font(Calculator.MAIN_FONT_NAME, Font.PLAIN, 16));
-        UIManager.put("OptionPane.buttonFont", new Font(Calculator.MAIN_FONT_NAME, Font.PLAIN, 16));
+        UIManager.put("OptionPane.messageFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
+        UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
 
         //             Вызов информационного окна
         JOptionPane.showMessageDialog(null,
