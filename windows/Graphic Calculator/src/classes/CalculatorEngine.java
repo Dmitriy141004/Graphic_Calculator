@@ -210,7 +210,7 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
      * @see CustomException
      */
     public void handleCustomException(CustomException exception) {
-        String fullMessage = exception.getMessage();                  // Получение текста исключения
+        String fullMessage = exception.getMessage();                                                        // Получение текста исключения
         String nameOfException = fullMessage.substring(0, fullMessage.indexOf("#"));                        // Имя ошибки
         String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());   // Описание ошибки
 

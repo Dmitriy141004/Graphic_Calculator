@@ -426,31 +426,53 @@ public class Calculator {
      * <p>Использует обычную конструкцию с буфером, для повышения скорости эфективности.</p>
      */
     public void loadVariables() {
-        variableMath.knownVariables.clear();
+        variableMath.knownVariables.clear();         // Очистка колекции со всеми известными переменными
 
-        FileReader myFile = null;
-        BufferedReader myBuffer = null;
+        FileReader myFile = null;            // Класс чтения из файла/Класс с файлом (фактически - ссылка/путь к файлу)
+        BufferedReader myBuffer = null;      // Буфер для чтения из файла
 
         try {
-            myFile = new FileReader("knownVariables.txt");
-            myBuffer = new BufferedReader(myFile);
+            myFile = new FileReader("knownVariables.txt");       // Открываем файл
+            myBuffer = new BufferedReader(myFile);               // Открываем буфер
 
+            /*
+            Прохождение по всем строчкам:
             while (true) {
                 String line = myBuffer.readLine();
                 if (line == null) break;
+                doSomeWork();
+            }
+            */
+            while (true) {
+                String line = myBuffer.readLine();       // Строка из текстового файла
+                if (line == null) break;
 
-                boolean start = false;
-                boolean writeVarName = true;
-                String varName = "";
-                String varValue = "";
+                /*
+                Код, отвечающий за поиск названия и значения переменной (принцип записи:
+                "(имя_переменной)"="(значение переменной)"). Когда находит двойную скобку (символ "\""), инвертирует
+                переменную записи. Также есть переменная которая отвечает за определение "Записывать в имя или значение?"
+                (по-умолчанию = true; запись в имя = true, запись в значение = false). Когда цикл доходит до символа
+                "равно", это значение переходит на "Запись в значение".
+                */
+                boolean start = false;            // Идёт запись куда-либо?
+                boolean writeVarName = true;      // Записывать в имя или значение?
+                String varName = "";              // Имя переменной
+                String varValue = "";             // Значение переменной
+
+                // ЦИКЛ ПРОХОЖДЕНИЯ ПО СИМВОЛАМ
                 for (int i = 0; i < line.length(); i++) {
-                    char symbol = line.charAt(i);
+                    char symbol = line.charAt(i);          // Символ
+
+                    // Когда цикл доходит до символа "равно", начинается запись в значение
                     if (!start && symbol == '=') writeVarName = false;
+                    // Когда находит двойную скобку (символ "\""), инвертирует переменную записи.
                     if (symbol == '\"') {
                         start = !start;
-                        continue;
+                        continue;          // И переходит на следуйщий символ
                     }
-                    if (start) {
+
+                    if (start) {            // Если работает запись,
+                        // Записываем в ту переменную, в которую надо
                         if (writeVarName) {
                             varName += symbol;
                         } else {
@@ -458,19 +480,22 @@ public class Calculator {
                         }
                     }
                 }
-                variableMath.knownVariables.put(varName, varValue);
+
+                variableMath.knownVariables.put(varName, varValue);      // После завершения обработки, надо записать переменную
             }
         } catch (FileNotFoundException e1) {  // На случай исключения FileNotFoundException (файл не найден)
             JCalculatorDialogs.errorMessage(new CustomException("FileNotFound Error",
                     "I can't find file to load variables,\nmaybe it not exists or you moved it to another place."));
             e1.printStackTrace();
+
         } catch (IOException e1) {            // На случай исключения IOException (ошибка доступа)
             e1.printStackTrace();
-        } finally {
+
+        } finally {                  // Заканчиваем чтение из файла, сработает в любом случае
             try {
-                if (myBuffer != null) myBuffer.close();
-                if (myFile != null) myFile.close();
-            } catch (IOException e1) {
+                if (myBuffer != null) myBuffer.close();     // Закрытие буфера
+                if (myFile != null) myFile.close();         // Закрытие файла
+            } catch (IOException e1) {    // На случай исключения IOException ил любого дочернего от IOException
                 e1.printStackTrace();
             }
         }
@@ -484,22 +509,26 @@ public class Calculator {
         BufferedWriter myBuffer = null;      // Буфер для записи в файл
 
         try {
+            // Если
             if (!new File("knownVariables.txt").exists()) throw new CustomException("FileNotFound Error",
                     "I can't find file to save known variables,\nmaybe it not exists or you moved it to another place.");
             myFile = new FileWriter("knownVariables.txt", false);         // Открываем файл
             myBuffer = new BufferedWriter(myFile);                        // Открываем буфер
 
             for (String data : variableMath.knownVariables.keySet()) {    // Проход по всем переменным
-                // Запись по такому шаблону: "(имя_переменной)"="(значение переменной)"
+                // Запись по такому принципу: "(имя_переменной)"="(значение переменной)"
                 myBuffer.write("\"" + data + "\"=\"" + variableMath.knownVariables.get(data) + "\"\n");
             }
+
         } catch (FileNotFoundException e1) {  // На случай исключения FileNotFoundException (файл не найден)
             e1.printStackTrace();
             throw new CustomException("FileNotFound Error",
                     "I can't find file to save known variables,\nmaybe it not exists or you moved it to another place.");
+
         } catch (IOException e1) {            // На случай исключения IOException (ошибка доступа)
             e1.printStackTrace();
-        } finally {                  // Заканчиваем запись, сработает в любом случае
+
+        } finally {                  // Заканчиваем запись в файл, сработает в любом случае
             try {
                 if (myBuffer != null) {
                     myBuffer.flush();    // "Сливаем" буфер
@@ -517,29 +546,38 @@ public class Calculator {
      * а также, так как не возникло никаких ошибок - выходим с кодом выхода "0".
      * Если файла не сыществует - сообщает об ошибке, и спрашивает:
      * "Выйти без сохранения или создать этот файл?".</p>
+     *
+     * @see Calculator#loadVariables()
+     * @see Calculator#saveVariables()
      */
     public void exit() {
         try {
             saveVariables();      // Сохранение переменных
             System.exit(0);       // Выход
-        } catch (CustomException e1) {
-            Object[] options = {"Exit without save", "Create this file"};
-            String fullMessage = e1.getMessage();
-            String nameOfException = fullMessage.substring(0, fullMessage.indexOf("#"));
-            String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());
 
+        } catch (CustomException e1) {      // Если возникла ошибка во время записи,
+            String fullMessage = e1.getMessage();                                                               // Получение текста исключения
+            String nameOfException = fullMessage.substring(0, fullMessage.indexOf("#"));                        // Имя ошибки
+            String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());   // Описание ошибки
+
+            //             Настройка шрифтов диалогового окна
             UIManager.put("OptionPane.messageFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
             UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
 
-            int reply = JOptionPane.showOptionDialog(null, nameOfException, exceptionDesc, JOptionPane.YES_NO_CANCEL_OPTION,
+            Object[] options = {"Exit without save", "Create this file"};        // Возможные варианты ответа
+            // Создание диалога: заголовок = имя ошибки, текст = описание ошибки, иконка = ошибочная иконка, варианты = options,
+            // выбраный вариант = options[1] ("Создать этот файл")
+            int reply = JOptionPane.showOptionDialog(null, nameOfException, exceptionDesc, JOptionPane.DEFAULT_OPTION,
                     JOptionPane.ERROR_MESSAGE, null, options, options[1]);
-            if (reply == 0) System.exit(0);
-            else if (reply == 1) {
+            if (reply == 0) System.exit(0);    // При первом варианте - выход,
+            else if (reply == 1) {             // При втором варианте - создание файла и выход
+
                 try {
                     new File("knownVariables.txt").createNewFile();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                exit();
             }
         }
     }
