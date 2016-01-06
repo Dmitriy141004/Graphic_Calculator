@@ -118,11 +118,13 @@ public class Calculator {
      */
     public void launchGraphics() {
 
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//        } catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
+        // Установка Look-and-Feel'а
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
 
         //                  Создание, настройка и добавление компонентов в меню на рядке меню :) (Тофтология)
         //                                            (И их действия + действия с горячими клавишами)
