@@ -206,6 +206,7 @@ public class Calculator {
         clearUpItem.addActionListener(e -> {
             try {
                 displayField.setText(variableMath.processText(displayField.getText(), true));
+                calcEngine.displayText = displayField.getText();
             } catch (CustomException e1) {
                 calcEngine.handleCustomException(e1);
             }
