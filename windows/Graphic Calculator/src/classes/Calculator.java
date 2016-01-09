@@ -19,7 +19,7 @@ import java.io.*;
  * Но также, он общается с "движком" проекта, или же с CalculatorEngine'ом.
  *
  * @author Дмитрий Мелешко
- * @version 1.8
+ * @version 1.8.2
  * @see Calculator#launchGraphics()
  * @see CalculatorEngine
  */
@@ -117,14 +117,6 @@ public class Calculator {
      *
      */
     public void launchGraphics() {
-
-        // Установка Look-and-Feel'а
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-
         //                  Создание, настройка и добавление компонентов в меню на рядке меню :) (Тофтология)
         //                                            (И их действия + действия с горячими клавишами)
         //                                      > Файл <
@@ -207,6 +199,7 @@ public class Calculator {
             try {
                 displayField.setText(variableMath.processText(displayField.getText(), true));
                 calcEngine.displayText = displayField.getText();
+                calcEngine.needOnlyNumber = false;
             } catch (CustomException e1) {
                 calcEngine.handleCustomException(e1);
             }
