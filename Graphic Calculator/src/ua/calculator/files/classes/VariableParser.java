@@ -39,7 +39,7 @@ import java.util.*;
  */
 public class VariableParser {
 
-    Map<String, String> knownVariables = new HashMap<>();             // Колекция/HashMap с известными переменными (название -> значение)
+    public Map<String, String> knownVariables = new HashMap<>();             // Колекция/HashMap с известными переменными (название -> значение)
     public static final char[] VARIABLE_STOPPER_CHARS = new char[] {'(', ' ', ')'};       // Символы, которые никак не относятся к переменным,
     //                                                                                       О них - попозже
 
