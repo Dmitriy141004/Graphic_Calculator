@@ -1,4 +1,4 @@
-package libs;
+package ua.calculator.files.libs;
 
 public class StringUtils {
     public static char[] toCharArray(String string) {

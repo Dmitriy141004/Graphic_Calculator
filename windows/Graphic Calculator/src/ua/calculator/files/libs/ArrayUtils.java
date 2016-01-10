@@ -1,4 +1,4 @@
-package libs;
+package ua.calculator.files.libs;
 
 import java.util.Objects;
 

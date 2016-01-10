@@ -1,7 +1,7 @@
-package classes;
+package ua.calculator.files.classes;
 
-import libs.*;
-import libs.exceptions.CustomException;
+import ua.calculator.files.libs.*;
+import ua.calculator.files.libs.exceptions.CustomException;
 
 import java.awt.event.*;
 import java.util.Objects;
@@ -13,13 +13,13 @@ import javax.swing.*;
  * Данный класс обрабатывает события, а точнее нажатия на кнопки,
  * А принимает он события от Calculator'а.
  * После принятия, при вычислении (нажата кнопка "="), класс отсылает текст
- * математического выражения другому классу - CalculatorMath'у,
+ * математического выражения другому классу - ExpressionParser'у,
  * который делает все вычисления.
  *
  * @author Дмитрий Мелешко
  * @since 1.0
  * @see CalculatorEngine#actionPerformed(java.awt.event.ActionEvent)
- * @see CalculatorMath
+ * @see ExpressionParser
  */
 public class CalculatorEngine implements ActionListener, FocusListener {    // "Движок" Калькулятора, ActionListener,
     // Ну, или просто - обработчик событий
@@ -28,7 +28,7 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
     String displayText = "";            // Текст на десплее
     String actionButtons[] = new String[]{"+", "-", "/", "*", "="};    // Текст кнопок с действиями, потом увидите зачем это надо
     String memory = "";                          // Текст в памяти
-    CalculatorMath math = new CalculatorMath();  // CalculatorMath - это класс, который считает математическое выражение из строки
+    ExpressionParser math = new ExpressionParser();  // ExpressionParser - это класс, который считает математическое выражение из строки
     boolean resultCounted = false;               // Посчитан ли результат? (если правда, то надо при нажатии кнопки обнулить Text Field
     boolean needOnlyNumber = true;               // Нужно ли только число? (чтобы ползователь не ввёл такое: "5 +  +  +  +  5 = "
 
@@ -55,7 +55,7 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
     /**
      * <h1><b> Метод подсчёта (обращения к обработчику и вывод на экран) выражения </b></h1>
      *
-     * @see CalculatorMath#process(String)
+     * @see ExpressionParser#process(String)
      * @param text текст, содержащий выражение.
      */
     public void count(String text) {
@@ -66,7 +66,7 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
         System.out.println("\t\t<PROCESS " + text + ">");
 
         try {
-            math.process(text);                // Обработка выражения классом CalculatorMath
+            math.process(text);                // Обработка выражения классом ExpressionParser
         } catch (CustomException ce1) {      // Если возникла ошибка (исключение)...
             handleCustomException(ce1);      // Обрабатываем её и сообщаем о ней
 

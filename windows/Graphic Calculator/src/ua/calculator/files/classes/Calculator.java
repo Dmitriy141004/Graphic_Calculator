@@ -1,7 +1,7 @@
-package classes;
+package ua.calculator.files.classes;
 
-import libs.ClipboardIO;
-import libs.exceptions.CustomException;
+import ua.calculator.files.libs.ClipboardIO;
+import ua.calculator.files.libs.exceptions.CustomException;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,7 @@
-package classes;
+package ua.calculator.files.classes;
 
-import libs.StringUtils;
-import libs.exceptions.CustomException;
+import ua.calculator.files.libs.StringUtils;
+import ua.calculator.files.libs.exceptions.CustomException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -144,7 +144,7 @@ public class JCalculatorDialogs {
                     }
                     nameField.requestFocus();
                     return;
-                } else if (CalculatorMath.ary1_has_ary2(nameField.getText().toCharArray(), NON_VARIABLE_CHARS)) {
+                } else if (ExpressionParser.ary1_has_ary2(nameField.getText().toCharArray(), NON_VARIABLE_CHARS)) {
                     errorMessage(new CustomException("InvalidName Error",
                             "Please, don't use charters like parts of \nnumbers, actions, brackets and quotes in name of variable."));
                     nameField.setText("");

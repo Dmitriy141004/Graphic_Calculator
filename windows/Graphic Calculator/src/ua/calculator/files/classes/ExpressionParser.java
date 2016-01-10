@@ -1,13 +1,13 @@
-package classes;
+package ua.calculator.files.classes;
 
-import libs.ArrayUtils;
-import libs.StringUtils;
-import libs.exceptions.CustomException;
+import ua.calculator.files.libs.ArrayUtils;
+import ua.calculator.files.libs.StringUtils;
+import ua.calculator.files.libs.exceptions.CustomException;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class CalculatorMath {
+public class ExpressionParser {
 
     public double currentResult = 0;
     private double numberA = 0;
@@ -16,7 +16,7 @@ public class CalculatorMath {
     private int end = 0;
     public static char[] actions = new char[] {'+', '-', '/', '*', '^'};
 
-    CalculatorMath() { newCalculation(); }
+    public ExpressionParser() { newCalculation(); }
 
     public static boolean ary1_has_ary2(char[] ary1, char[] ary2) {
         boolean out = false;

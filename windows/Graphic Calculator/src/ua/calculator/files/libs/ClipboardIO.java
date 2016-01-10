@@ -9,7 +9,7 @@
  * @since 1.5.3
  */
 
-package libs;
+package ua.calculator.files.libs;
 
 import java.awt.*;
 import java.awt.datatransfer.*;

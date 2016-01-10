@@ -1,7 +1,7 @@
-package classes;
+package ua.calculator.files.classes;
 
-import libs.ArrayUtils;
-import libs.exceptions.CustomException;
+import ua.calculator.files.libs.ArrayUtils;
+import ua.calculator.files.libs.exceptions.CustomException;
 
 import java.util.*;
 
@@ -83,7 +83,7 @@ public class CalculatorVariables {
     public String processText(String text, boolean normalLaunch) throws CustomException {
         //                   Проверка на пустой текст
         if (text.isEmpty()) throw new CustomException("EmptyData Error", "Please, type something in text field.");
-        text = new CalculatorMath().formatInput(text) + " ";        // Форматирование текста
+        text = new ExpressionParser().formatInput(text) + " ";        // Форматирование текста
 
         //            ГЛАВНЫЙ ЦИКЛ FOR
         for (int index = 0; index < text.length(); index++) {

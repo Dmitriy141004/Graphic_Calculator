@@ -1,4 +1,4 @@
-package classes;
+package ua.calculator.files.classes;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
