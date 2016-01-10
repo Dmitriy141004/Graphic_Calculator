@@ -415,6 +415,14 @@ public class Calculator {
         Calculator calc = new Calculator();            // Создание и запуск нового калькулятора
         calc.launchGraphics();
         calc.loadVariables();
+
+        String result;
+        try {
+            String expression = calc.variableMath.processText("x * x = ", true);
+            calc.calcEngine.count(expression);
+        } catch (CustomException e1) {
+            JCalculatorDialogs.errorMessage(e1);
+        }
     }
 
     /** <h1><b>======= Метод для загрузки переменных =======</b></h1>

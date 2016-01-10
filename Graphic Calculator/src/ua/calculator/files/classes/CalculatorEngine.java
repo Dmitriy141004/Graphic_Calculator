@@ -37,7 +37,7 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
      *
      * @param parent ссылка на графический класс, который вызвал и использует движок. Нужно чтобы можно было взаимодействовать графикой.
      */
-    CalculatorEngine(Calculator parent) {
+    public CalculatorEngine(Calculator parent) {
         this.parent = parent;
         newCounting("");                         // А также, перезапуск системы
     }
