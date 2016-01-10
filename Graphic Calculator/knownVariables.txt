@@ -5,6 +5,5 @@
 "bigger_variable"="3"
 "clone"="4"
 "variable"="some + long_var + abc"
-"x"="-1.0"
 "expression_var"="abc + var"
 "something"="bigger_variable - clone"

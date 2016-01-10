@@ -60,6 +60,7 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
      */
     public void count(String text) {
         resultCounted = true;
+        needOnlyNumber = true;
 
         System.out.println("<OUT>");
         System.out.println("\t<COUNT>");
@@ -218,17 +219,24 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
         UIManager.put("OptionPane.messageFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
         UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
 
+        newCounting("Error");                                    // Новый подсчёт, загрузка в Text Field текста "Error"
+
         //             Вызов информационного окна
         JOptionPane.showMessageDialog(null,
                 nameOfException,
                 exceptionDesc,
                 JOptionPane.ERROR_MESSAGE);
+    }
 
-        newCounting("Error");                                    // Новый подсчёт, загрузка в Text Field текста "Error"
+    public void clearUpExpression() {
+
     }
 
     // Методы для улавливания фокуса на поле
-    public void focusGained(FocusEvent e) { if (resultCounted) newCounting(""); }
+    public void focusGained(FocusEvent e) {
+        if (resultCounted) newCounting("");
+        if (displayText.equals("Error")) displayText = "";
+    }
 
     public void focusLost(FocusEvent e) { }
 }

@@ -171,8 +171,6 @@ public class Calculator {
                 calcEngine.newCounting(displayField.getText() + io.getText());
             } catch (IOException | UnsupportedFlavorException e1) {
                 e1.printStackTrace();
-                calcEngine.resultCounted = true;
-                calcEngine.newCounting("Error");
                 calcEngine.handleCustomException(new CustomException("I can't read text from clipboard, \nplease, copy something.", "Pasting Error"));
             }
         });                                      // При нажатии на кнопку "Вставить",
@@ -202,6 +200,9 @@ public class Calculator {
                 calcEngine.needOnlyNumber = false;
             } catch (CustomException e1) {
                 calcEngine.handleCustomException(e1);
+                calcEngine.resultCounted = true;
+                calcEngine.needOnlyNumber = true;
+                fileMenu.requestFocus();
             }
         });
 
@@ -415,14 +416,6 @@ public class Calculator {
         Calculator calc = new Calculator();            // Создание и запуск нового калькулятора
         calc.launchGraphics();
         calc.loadVariables();
-
-        String result;
-        try {
-            String expression = calc.variableMath.processText("x * x = ", true);
-            calc.calcEngine.count(expression);
-        } catch (CustomException e1) {
-            JCalculatorDialogs.errorMessage(e1);
-        }
     }
 
     /** <h1><b>======= Метод для загрузки переменных =======</b></h1>
