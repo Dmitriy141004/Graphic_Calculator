@@ -1,7 +1,7 @@
 package ua.calculator.files.classes;
 
 import ua.calculator.files.libs.ClipboardIO;
-import ua.calculator.files.libs.exceptions.CustomException;
+import ua.calculator.files.libs.CustomException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -110,7 +110,7 @@ public class Calculator {
     CalculatorEngine calcEngine;                                                  // Об этом - чуть попозже
     CalculatorMathModes calculatorMathModes = new CalculatorMathModes(this);      // И об этом тоже
     ClipboardIO io = new ClipboardIO();                                           // Это - класс для взаимодействия с буфером обмена
-    CalculatorVariables variableMath = new CalculatorVariables();           // Система замены переменных в выражении на их значения
+    VariableParser variableMath = new VariableParser();           // Система замены переменных в выражении на их значения
 
     /** <h1><b> Метод настройки и запуска графики </b></h1>
      * <p> Надо вызвать после объявления класса. </p>

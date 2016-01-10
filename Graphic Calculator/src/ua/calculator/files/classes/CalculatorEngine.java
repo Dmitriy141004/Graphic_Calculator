@@ -1,7 +1,7 @@
 package ua.calculator.files.classes;
 
 import ua.calculator.files.libs.*;
-import ua.calculator.files.libs.exceptions.CustomException;
+import ua.calculator.files.libs.CustomException;
 
 import java.awt.event.*;
 import java.util.Objects;

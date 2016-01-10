@@ -2,7 +2,7 @@ package ua.calculator.files.classes;
 
 import ua.calculator.files.libs.ArrayUtils;
 import ua.calculator.files.libs.StringUtils;
-import ua.calculator.files.libs.exceptions.CustomException;
+import ua.calculator.files.libs.CustomException;
 
 import java.util.ArrayList;
 import java.util.Objects;

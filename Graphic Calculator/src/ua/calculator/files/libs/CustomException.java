@@ -1,4 +1,4 @@
-package ua.calculator.files.libs.exceptions;
+package ua.calculator.files.libs;
 
 /**
  * <h1><b>======= CustomException =======</b></h1>

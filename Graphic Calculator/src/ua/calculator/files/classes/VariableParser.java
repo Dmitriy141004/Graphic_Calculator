@@ -1,12 +1,12 @@
 package ua.calculator.files.classes;
 
 import ua.calculator.files.libs.ArrayUtils;
-import ua.calculator.files.libs.exceptions.CustomException;
+import ua.calculator.files.libs.CustomException;
 
 import java.util.*;
 
 /**
- * <h1><b>======= CalculatorVariables =======</b></h1>
+ * <h1><b>======= VariableParser =======</b></h1>
  *
  * Данный класс является обработчиком переменных в выражении, т.е. он проходит по выражению,
  * и если находит переменную - заменяет её на значение. Также, не маловажной деталью является
@@ -34,10 +34,10 @@ import java.util.*;
  * @author Дмитрий Мелешко
  * @since 1.7
  * @see JCalculatorDialogs
- * @see CalculatorVariables#processText(String, boolean)
- * @see CalculatorVariables#searchNested(String)
+ * @see VariableParser#processText(String, boolean)
+ * @see VariableParser#searchNested(String)
  */
-public class CalculatorVariables {
+public class VariableParser {
 
     Map<String, String> knownVariables = new HashMap<>();             // Колекция/HashMap с известными переменными (название -> значение)
     public static final char[] VARIABLE_STOPPER_CHARS = new char[] {'(', ' ', ')'};       // Символы, которые никак не относятся к переменным,
@@ -78,7 +78,7 @@ public class CalculatorVariables {
      *     <li>Текст пустой (равен "")</li>
      *     <li>Если найденая переменная не объявлена</li>
      * </ul>
-     * @see CalculatorVariables#anyVariableHasChar(char)
+     * @see VariableParser#anyVariableHasChar(char)
      */
     public String processText(String text, boolean normalLaunch) throws CustomException {
         //                   Проверка на пустой текст
@@ -156,7 +156,7 @@ public class CalculatorVariables {
      *
      * @param text текст, который надо обработать. В основном строится так: <tt>"(имя_переменной) "</tt> (в конце - пробел).
      * @return либо вложенные переменные в формате <tt>"var1 = 5, var2 = 3."</tt>, либо если нет вложенных - <tt>"None"</tt>, либо, если происходит ошибка - <tt>"Error"</tt>.
-     * @see CalculatorVariables#processText(String, boolean)
+     * @see VariableParser#processText(String, boolean)
      */
     public String searchNested(String text) {
         // Пробуем опустить переменную на уровень ниже (т.е.: a = "b + c", вернёт "b + c"). Тут то и нужен ненормальный запуск!

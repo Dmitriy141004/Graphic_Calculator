@@ -1,7 +1,7 @@
 package ua.calculator.files.classes;
 
 import ua.calculator.files.libs.StringUtils;
-import ua.calculator.files.libs.exceptions.CustomException;
+import ua.calculator.files.libs.CustomException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,7 +72,7 @@ public class JCalculatorDialogs {
 
     public static void addingDialog(Calculator calculator) {
         Calculator.frame.setEnabled(false);
-        CalculatorVariables variableMath = calculator.variableMath;
+        VariableParser variableMath = calculator.variableMath;
         JFrame frame = new JFrame("Add A New Variable");
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -175,7 +175,7 @@ public class JCalculatorDialogs {
 
     public static void deletingDialog(Calculator calculator) {
         Calculator.frame.setEnabled(false);
-        CalculatorVariables variableMath = calculator.variableMath;
+        VariableParser variableMath = calculator.variableMath;
         JFrame frame = new JFrame("Delete A Variable");
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -226,7 +226,7 @@ public class JCalculatorDialogs {
 
     public static void changingDialog(Calculator calculator) {
         Calculator.frame.setEnabled(false);
-        CalculatorVariables variableMath = calculator.variableMath;
+        VariableParser variableMath = calculator.variableMath;
         JFrame frame = new JFrame("Change A Variable");
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -304,7 +304,7 @@ public class JCalculatorDialogs {
 
     public static void viewingDialog(Calculator calculator) {
         Calculator.frame.setEnabled(false);
-        CalculatorVariables variableMath = calculator.variableMath;
+        VariableParser variableMath = calculator.variableMath;
         JFrame frame = new JFrame("View Existing Variables");
         JPanel panel = new JPanel();
         panel.setLayout(null);
