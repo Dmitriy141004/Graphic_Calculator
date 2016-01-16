@@ -21,7 +21,7 @@ public class JCalculatorDialogs {
     public static final Font ERROR_MESSAGE_FONT = new Font(Calculator.MAIN_FONT_NAME, Font.PLAIN, 18);
     public static final Dimension DEFAULT_LIST_SIZE = new Dimension(260, 220);
     public static final Font LIST_FONT = new Font(Calculator.MAIN_FONT_NAME, Font.PLAIN, 17);
-    public static final char[] NON_VARIABLE_CHARS = new char[] {'.', '+', '-', '/', '*', '^', '(', ')', '\"'};
+    public static final char[] NON_VARIABLE_CHARS = new char[] {'.', '+', '-', '/', '*', '^', '(', ')', '\"', ',', '='};
     private static String selectedVariableForView = "";
 
     public static void disposeFrame(JFrame frame, Calculator calculator) {

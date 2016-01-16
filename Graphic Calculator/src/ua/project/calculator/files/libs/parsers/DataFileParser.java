@@ -1,5 +1,7 @@
 package ua.project.calculator.files.libs.parsers;
 
+import ua.project.calculator.files.libs.StringUtils;
+
 import java.util.HashMap;
 
 /** <h1><b>======= DataFileParser =======</b></h1>
@@ -34,9 +36,10 @@ public class DataFileParser {
             if (text.charAt(i) == '\n' && i == 0) break;
 
             if (text.charAt(i) == '=' && readingName) {       // Символ равно
-                readingName = false;                          // Надо только переключить режим
+                readingName = false;                                                        // Надо только переключить режим
                 continue;
             }
+
             if (text.charAt(i) == ',' && !readingName) {      // Символ запятуи. Тут происходит обнуление
                 readingName = true;
                 values.put(currentName, currentValue);
