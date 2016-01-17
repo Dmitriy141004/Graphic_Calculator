@@ -41,8 +41,8 @@ import java.util.*;
 public class VariableParser {
 
     public Map<String, String> knownVariables = new HashMap<>();             // Колекция/HashMap с известными переменными (название -> значение)
-    public static final char[] VARIABLE_STOPPER_CHARS = new char[] {'(', ' ', ')'};       // Символы, которые никак не относятся к переменным,
-    //                                                                                       О них - попозже
+    public static final char[] VARIABLE_STOPPER_CHARS = {'(', ' ', ')'};       // Символы, которые никак не относятся к переменным,
+    //                                                                            О них - попозже
 
     /** <h1><b> Метод для проверки наличия символа в любой пременной </b></h1>
      * <p> Используется для того, чтоб понять, стоит ли начинать

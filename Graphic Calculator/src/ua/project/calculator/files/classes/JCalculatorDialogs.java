@@ -11,17 +11,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class JCalculatorDialogs {
 
     public static final Font DEFAULT_FONT = new Font(Calculator.MAIN_FONT_NAME, Font.PLAIN, 20);
     public static final Dimension OK_CANCEL_BUTTON_SIZE = new Dimension(120, 50);
-    public static final Font ERROR_MESSAGE_FONT = new Font(Calculator.MAIN_FONT_NAME, Font.PLAIN, 18);
+    public static final Font DIALOG_MESSAGE_FONT = new Font(Calculator.MAIN_FONT_NAME, Font.PLAIN, 18);
     public static final Dimension DEFAULT_LIST_SIZE = new Dimension(260, 220);
     public static final Font LIST_FONT = new Font(Calculator.MAIN_FONT_NAME, Font.PLAIN, 17);
-    public static final char[] NON_VARIABLE_CHARS = new char[] {'.', '+', '-', '/', '*', '^', '(', ')', '\"', ',', '='};
+    public static final char[] NON_VARIABLE_CHARS = new char[] {'.', '+', '-', '/', '*', '^', '(', ')', '\"', ',', '=', '\\'};
+    public static final char[] NUMBER_CHARS = new char[] {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
     private static String selectedVariableForView = "";
 
     public static void disposeFrame(JFrame frame, Calculator calculator) {
@@ -80,8 +80,8 @@ public class JCalculatorDialogs {
         String nameOfException = fullMessage.substring(0, fullMessage.indexOf("#"));
         String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());
 
-        UIManager.put("OptionPane.messageFont", ERROR_MESSAGE_FONT);
-        UIManager.put("OptionPane.buttonFont", ERROR_MESSAGE_FONT);
+        UIManager.put("OptionPane.messageFont", DIALOG_MESSAGE_FONT);
+        UIManager.put("OptionPane.buttonFont", DIALOG_MESSAGE_FONT);
 
         JOptionPane.showMessageDialog(null,
                 nameOfException,
@@ -140,11 +140,20 @@ public class JCalculatorDialogs {
                 KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "OK");
         frame.getRootPane().getActionMap().put("OK", new AbstractAction(){
             public void actionPerformed(ActionEvent e) {
-                okButton.getActionListeners()[0].actionPerformed(e);
+                if (!nameField.getText().isEmpty() && valueField.getText().isEmpty()) {
+                    valueField.requestFocus();
+                } else if (nameField.getText().isEmpty() && !valueField.getText().isEmpty()) {
+                    nameField.requestFocus();
+                } else if (!nameField.getText().isEmpty() && !valueField.getText().isEmpty()) {
+                    okButton.getActionListeners()[0].actionPerformed(e);
+                }
             }
         });
 
         okButton.addActionListener(e -> {
+            nameField.setText(nameField.getText().trim());
+            valueField.setText(valueField.getText().trim());
+
             if (!nameField.getText().isEmpty() && !valueField.getText().isEmpty()) {
                 if (variableMath.knownVariables.containsKey(nameField.getText())) {
                     errorMessage(new CustomException("VariableNameExists Error",
@@ -163,6 +172,29 @@ public class JCalculatorDialogs {
                 } else if (ExpressionParser.ary1_has_ary2(nameField.getText().toCharArray(), NON_VARIABLE_CHARS)) {
                     errorMessage(new CustomException("InvalidName Error",
                             "Please, don't use charters like parts of \nnumbers, actions, brackets and quotes in name of variable."));
+                    nameField.setText("");
+                    nameField.requestFocus();
+                    return;
+                } else if (nameField.getText().equals(valueField.getText())) {
+                    errorMessage(new CustomException("SameNameAndValue Error",
+                            "Name of new variable and its value\ncan\'t equal - this can cause recursion."));
+                    valueField.setText("");
+                    valueField.requestFocus();
+                    return;
+                }
+
+                boolean containsOtherChars = false;
+
+                for (char c : nameField.getText().toCharArray()) {
+                    if (!ArrayUtils.array_has(NUMBER_CHARS, c)) {
+                        containsOtherChars = true;
+                        break;
+                    }
+                }
+
+                if (!containsOtherChars) {
+                    errorMessage(new CustomException("InvalidName Error",
+                            "Please, don't use charters like numbers in name of variable."));
                     nameField.setText("");
                     nameField.requestFocus();
                     return;
@@ -200,6 +232,8 @@ public class JCalculatorDialogs {
         setupJLabel(new Point(78, 50), new Dimension(290, 30), "Choose a variable to delete:", panel);
 
         JList existingNames = setupList(new Point(73, 120), variableMath.knownVariables.keySet().toArray(), panel);
+
+        existingNames.requestFocus();
 
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
@@ -254,6 +288,7 @@ public class JCalculatorDialogs {
         setupJLabel(new Point(65, 50), new Dimension(290, 30), "Choose a variable to change:", panel);
 
         JList existingNames = setupList(new Point(73, 120), variableMath.knownVariables.keySet().toArray(), panel);
+        existingNames.requestFocus();
 
         setupJLabel(new Point(350, 170), new Dimension(100, 100), "\u2192", panel,
                 new Font(Calculator.UNICODE_FONT.getName(), Font.PLAIN, 100));
@@ -269,10 +304,18 @@ public class JCalculatorDialogs {
 
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
+            newValueField.setText(newValueField.getText().trim());
+
             if (existingNames.getSelectedValue() != null) {
                 if (!newValueField.getText().isEmpty())
                     variableMath.knownVariables.replace(existingNames.getSelectedValue().toString(), newValueField.getText());
-                else {
+                else if (existingNames.getSelectedValue().equals(newValueField.getText())) {
+                    errorMessage(new CustomException("SameNameAndValue Error",
+                            "Name of variable and its new value\ncan\'t equal - this can cause recursion."));
+                    newValueField.setText("");
+                    newValueField.requestFocus();
+                    return;
+                } else {
                     errorMessage(new CustomException("VariableNotSelected Error",
                             "Please, enter new value of variable."));
                     newValueField.requestFocus();
@@ -313,7 +356,11 @@ public class JCalculatorDialogs {
                 KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "OK");
         frame.getRootPane().getActionMap().put("OK", new AbstractAction(){
             public void actionPerformed(ActionEvent e) {
-                okButton.getActionListeners()[0].actionPerformed(e);
+                if (newValueField.getText().isEmpty() && !existingNames.isSelectionEmpty()) {
+                    newValueField.requestFocus();
+                } else if (!newValueField.getText().isEmpty() && !existingNames.isSelectionEmpty()) {
+                    okButton.getActionListeners()[0].actionPerformed(e);
+                }
             }
         });
     }
@@ -344,6 +391,13 @@ public class JCalculatorDialogs {
                     "<html><i>value</i> = \"" + variableMath.knownVariables.get(selectedVariableForView) + "\"</html>",
                     "<html><i>nested</i> = { " + variableMath.searchNested(selectedVariableForView + " ") + " }</html>",
                     "<html><i>raw data</i> = \"" + rawData + "\"</html>"});
+        });
+        prototypes.setFocusable(false);
+        prototypes.setSelectionModel(new DefaultListSelectionModel() {
+            @Override
+            public void setSelectionInterval(int index0, int index1) {
+                super.setSelectionInterval(-1, -1);
+            }
         });
 
         setupJLabel(new Point(350, 150), new Dimension(100, 100), "\u2192", panel,
@@ -392,8 +446,8 @@ public class JCalculatorDialogs {
         panel.setLayout(null);
         panel.setSize(900, 500);
 
-        DisabledItemSelectionModel disableSelection1 = new DisabledItemSelectionModel();
-        DisabledItemSelectionModel disableSelection2 = new DisabledItemSelectionModel();
+        ToggleableSelection disableSelection1 = new ToggleableSelection();
+        ToggleableSelection disableSelection2 = new ToggleableSelection();
 
         int firstPos = 60;
         setupJLabel(new Point(135, 50), new Dimension(200, 50), "Expression:", panel);
@@ -428,6 +482,20 @@ public class JCalculatorDialogs {
             disableSelection2.cmdSelect = false;
         });
 
+        JButton clearHistoryButton = new JButton("Clear History");
+        clearHistoryButton.setFont(DEFAULT_FONT);
+        clearHistoryButton.setBackground(Calculator.RED_COLOR);
+        clearHistoryButton.setForeground(Calculator.NORMAL_TEXT_COLOR);
+        clearHistoryButton.setSize(230, 50);
+        clearHistoryButton.setLocation(70, panel.getSize().height - 120);
+        panel.add(clearHistoryButton);
+        clearHistoryButton.addActionListener(e -> {
+            history.clear();
+            expressionColumn.setListData(new Object[0]);
+            resultColumn.setListData(new Object[0]);
+            dateColumn.setListData(new Object[0]);
+        });
+
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> disposeFrame(frame, calculator));
         okButton.setFont(DEFAULT_FONT);
@@ -459,7 +527,7 @@ public class JCalculatorDialogs {
         });
     }
 
-    private static class DisabledItemSelectionModel extends DefaultListSelectionModel {
+    private static class ToggleableSelection extends DefaultListSelectionModel {
 
         private boolean cmdSelect = false;
 

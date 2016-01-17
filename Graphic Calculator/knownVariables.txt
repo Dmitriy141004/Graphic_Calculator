@@ -1,7 +1,7 @@
 name="some",value="1332"
 name="abc",value="2"
 name="long_var",value="expression_var + something"
-name="var",value="2"
+name="var",value="abc"
 name="bigger_variable",value="3"
 name="clone",value="4"
 name="variable",value="some + long_var + abc"

@@ -63,7 +63,7 @@ public class Calculator {
     JMenuItem deleteItem = new JMenuItem("Delete");                  // "Удалить Переменную"
     JMenuItem changeItem = new JMenuItem("Change");                  // "Изменить Переменную"
     JMenuItem viewItem = new JMenuItem("View");                      // "Просмотреть переменные"
-    JMenuItem clearUpItem = new JMenuItem("Clear Up expression");    // "Почистить Выражение"
+    JMenuItem cleanUpItem = new JMenuItem("Clean Up expression");    // "Почистить Выражение"
 
     public static final String MAIN_FONT_NAME = "Comic Sans MS";
     public static final Font TEXT_FIELD_FONT = new Font(MAIN_FONT_NAME, Font.PLAIN, 26);         // Шрифт Text Field'а
@@ -194,7 +194,7 @@ public class Calculator {
         variableMenu.add(deleteItem);        // Кнопка "Удалить Переменную"
         variableMenu.add(changeItem);        // Кнопка "Изменить Переменную"
         variableMenu.add(viewItem);          // Кнопка "Просмотреть переменные"
-        variableMenu.add(clearUpItem);       // Кнопка  "Почистить Выражение"
+        variableMenu.add(cleanUpItem);       // Кнопка  "Почистить Выражение"
 
         addItem.addActionListener(e -> JCalculatorDialogs.addingDialog(this));
 
@@ -204,7 +204,7 @@ public class Calculator {
 
         changeItem.addActionListener(e -> JCalculatorDialogs.changingDialog(this));
 
-        clearUpItem.addActionListener(e -> {
+        cleanUpItem.addActionListener(e -> {
             try {
                 displayField.setText(variableMath.processText(displayField.getText(), true));
                 calcEngine.displayText = displayField.getText();
@@ -279,7 +279,7 @@ public class Calculator {
         deleteItem.setFont(ITEM_FONT);      // Кнопка "Удалить Переменную"
         changeItem.setFont(ITEM_FONT);      // Кнопка "Изменить Переменную"
         viewItem.setFont(ITEM_FONT);        // Кнопка "Просмотреть переменные"
-        clearUpItem.setFont(ITEM_FONT);     // Кнопка  "Почистить Выражение"
+        cleanUpItem.setFont(ITEM_FONT);     // Кнопка  "Почистить Выражение"
 
         //                                     Задние фоны других кнопок и Text Field'а
         buttonPoint.setBackground(BLACK_COLOR);             // Кнопка "."
@@ -629,8 +629,8 @@ public class Calculator {
             String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());   // Описание ошибки
 
             //             Настройка шрифтов диалогового окна
-            UIManager.put("OptionPane.messageFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
-            UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
+            UIManager.put("OptionPane.messageFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+            UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
 
             Object[] options = {"Exit without save", "Create this file"};        // Возможные варианты ответа
             // Создание диалога: заголовок = имя ошибки, текст = описание ошибки, иконка = ошибочная иконка, варианты = options,
@@ -657,8 +657,8 @@ public class Calculator {
             String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());   // Описание ошибки
 
             //             Настройка шрифтов диалогового окна
-            UIManager.put("OptionPane.messageFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
-            UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
+            UIManager.put("OptionPane.messageFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+            UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
 
             Object[] options = {"Exit without save", "Create this file"};        // Возможные варианты ответа
             // Создание диалога: заголовок = имя ошибки, текст = описание ошибки, иконка = ошибочная иконка, варианты = options,
@@ -685,5 +685,7 @@ public class Calculator {
         calc.launchGraphics();
         calc.loadVariables();
         calc.loadHistory();
+
+//        calc.variableMath.knownVariables.put("var()", "123");
     }
 }

@@ -6,11 +6,10 @@ import ua.project.calculator.files.libs.CustomException;
 import ua.project.calculator.files.libs.ArrayUtils;
 import ua.project.calculator.files.libs.StringUtils;
 
+import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 import javax.swing.*;
 
 /**
@@ -39,6 +38,8 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
     boolean needOnlyNumber = true;               // Нужно ли только число? (чтобы ползователь не ввёл такое: "5 +  +  +  +  5 = "
     ArrayList<ExpressionInHistory> history = new ArrayList<>();
     //                                              Колекция/ArrayList с историей вычислений. Хранит выражения, их ответы и дату вычисления
+    boolean askAboutCleanUp = true;              // Спрашивать ли про подчистку выражения? Используется в методе подсчёта
+    boolean cleanUp = false;                     // Подчисщать ли выражения?
 
     /**
      * <h1><b> Конструктор, привязка к калькулятору </b></h1>
@@ -69,6 +70,52 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
     public void count(String text) {
         resultCounted = true;
         needOnlyNumber = true;
+
+        // Этот код отвечает за подчистку текста перед подсчётом
+
+        // Эта часть срабатывает только если не была выбран флажок "Не спрашивать меня снова", открывает диалог
+        if (askAboutCleanUp) {
+            // Это панелька с содержимым диалога
+            JPanel msgPanel = new JPanel(new GridLayout(4, 1));
+
+            JLabel msg1 = new JLabel("Your expression may contain clean-up-able");
+            msg1.setFont(JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+            msgPanel.add(msg1);
+
+            JLabel msg2 = new JLabel("items. Would you like to clean up expression?");
+            msg2.setFont(JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+            msgPanel.add(msg2);
+
+            // И я сделал пустую надпись для отступа между текстом и флажком
+            msgPanel.add(new JLabel(""));
+
+            JCheckBox jcb = new JCheckBox("Don\'t ask me again");
+            jcb.setFont(JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+            msgPanel.add(jcb);
+
+            UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+
+            // Включаем диалог
+            cleanUp = JOptionPane.showConfirmDialog(null, msgPanel, "Clean Up Expression First?", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION;
+
+            if (jcb.isSelected()) askAboutCleanUp = false;
+        }
+
+        // Если надо подчистить - делаем
+        if (cleanUp) {
+            try {
+                parent.displayField.setText(parent.variableMath.processText(text, true) + ((displayText.contains("=")) ? "" : " = "));
+                text = parent.displayField.getText();
+                needOnlyNumber = false;
+            } catch (CustomException e1) {
+                handleCustomException(e1);
+                resultCounted = true;
+                needOnlyNumber = true;
+                parent.fileMenu.requestFocus();
+                return;
+            }
+        }
 
         System.out.println("<OUT>");
         System.out.println("\t<COUNT>");
@@ -230,8 +277,8 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
         String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());   // Описание ошибки
 
         //             Настройка шрифтов информационного окна
-        UIManager.put("OptionPane.messageFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
-        UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.ERROR_MESSAGE_FONT);
+        UIManager.put("OptionPane.messageFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+        UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
 
         newCounting("Error");                                    // Новый подсчёт, загрузка в Text Field текста "Error"
 

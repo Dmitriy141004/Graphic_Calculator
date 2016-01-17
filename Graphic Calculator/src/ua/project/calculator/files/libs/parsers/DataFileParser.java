@@ -33,7 +33,6 @@ public class DataFileParser {
         String currentValue = "";                             // Значение параметра
         // ГЛАВНЫЙ ЦИКЛ ПО ПЕРЕБОРУ СИМВОЛОВ
         for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '\n' && i == 0) break;
 
             if (text.charAt(i) == '=' && readingName) {       // Символ равно
                 readingName = false;                                                        // Надо только переключить режим
