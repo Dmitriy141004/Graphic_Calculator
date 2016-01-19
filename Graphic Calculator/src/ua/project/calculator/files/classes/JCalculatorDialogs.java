@@ -2,8 +2,8 @@ package ua.project.calculator.files.classes;
 
 import ua.project.calculator.files.classes.objects.ExpressionInHistory;
 import ua.project.calculator.files.libs.ArrayUtils;
-import ua.project.calculator.files.libs.parsers.ExpressionParser;
-import ua.project.calculator.files.libs.parsers.VariableParser;
+import ua.project.calculator.files.libs.parsers.impls.ExpressionParser;
+import ua.project.calculator.files.libs.parsers.impls.VariableParser;
 import ua.project.calculator.files.libs.StringUtils;
 import ua.project.calculator.files.libs.CustomException;
 
@@ -39,18 +39,13 @@ public class JCalculatorDialogs {
         okButton.setLocation(width / 2 - 150, height - 120);
         cancelButton.setLocation(width / 2 + 20, height - 120);
 
-        okButton.setBackground(Calculator.ORANGE_COLOR);
-        cancelButton.setBackground(Calculator.ORANGE_COLOR);
-        okButton.setForeground(Calculator.NORMAL_TEXT_COLOR);
-        cancelButton.setForeground(Calculator.NORMAL_TEXT_COLOR);
-
         panel.add(okButton);
         panel.add(cancelButton);
         return panel;
     }
 
-    private static JList setupList(Point location, Object[] listData, JPanel panel) {
-        JList list = new JList(listData);
+    private static JList<Object> setupList(Point location, Object[] listData, JPanel panel) {
+        JList<Object> list = new JList<>(listData);
         list.setVisibleRowCount(10);
         list.setLayoutOrientation(JList.VERTICAL);
         JScrollPane scrollPane = new JScrollPane(list);
@@ -373,7 +368,7 @@ public class JCalculatorDialogs {
         panel.setLayout(null);
         panel.setSize(800, 500);
 
-        JList prototypes = setupList(new Point(470, 103), new Object[0], panel);
+        JList<Object> prototypes = setupList(new Point(470, 103), new Object[0], panel);
 
         JList existingVariables = setupList(new Point(70, 103), variableMath.knownVariables.keySet().toArray(), panel);
         existingVariables.addListSelectionListener(e -> {
@@ -412,8 +407,6 @@ public class JCalculatorDialogs {
         okButton.setFont(DEFAULT_FONT);
         okButton.setSize(OK_CANCEL_BUTTON_SIZE);
         okButton.setLocation(panel.getSize().width / 2 - 60, panel.getSize().height - 120);
-        okButton.setBackground(Calculator.ORANGE_COLOR);
-        okButton.setForeground(Calculator.NORMAL_TEXT_COLOR);
         panel.add(okButton);
 
         frame.setContentPane(panel);
@@ -456,18 +449,18 @@ public class JCalculatorDialogs {
 
         ArrayList<String> expressionFields =
                 history.stream().map(item -> item.expression).collect(Collectors.toCollection(ArrayList<String>::new));
-        JList expressionColumn = setupList(new Point(firstPos, 100), expressionFields.toArray(), panel);
+        JList<Object> expressionColumn = setupList(new Point(firstPos, 100), expressionFields.toArray(), panel);
         expressionColumn.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         ArrayList<String> resultFields =
                 history.stream().map(item -> item.result).collect(Collectors.toCollection(ArrayList<String>::new));
-        JList resultColumn = setupList(new Point(firstPos + 260, 100), resultFields.toArray(), panel);
+        JList<Object> resultColumn = setupList(new Point(firstPos + 260, 100), resultFields.toArray(), panel);
         resultColumn.setSelectionModel(disableSelection1);
         resultColumn.setFocusable(false);
 
         ArrayList<String> dateFields =
                 history.stream().map(item -> item.date).collect(Collectors.toCollection(ArrayList<String>::new));
-        JList dateColumn = setupList(new Point(firstPos + 520, 100), dateFields.toArray(), panel);
+        JList<Object> dateColumn = setupList(new Point(firstPos + 520, 100), dateFields.toArray(), panel);
         dateColumn.setSelectionModel(disableSelection2);
         dateColumn.setFocusable(false);
 
@@ -501,8 +494,6 @@ public class JCalculatorDialogs {
         okButton.setFont(DEFAULT_FONT);
         okButton.setSize(OK_CANCEL_BUTTON_SIZE);
         okButton.setLocation(panel.getSize().width / 2 - 60, panel.getSize().height - 120);
-        okButton.setBackground(Calculator.ORANGE_COLOR);
-        okButton.setForeground(Calculator.NORMAL_TEXT_COLOR);
         panel.add(okButton);
 
         frame.setContentPane(panel);

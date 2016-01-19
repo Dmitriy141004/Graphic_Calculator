@@ -1,8 +1,8 @@
 package ua.project.calculator.files.classes;
 
 import ua.project.calculator.files.classes.objects.ExpressionInHistory;
-import ua.project.calculator.files.libs.parsers.DataFileParser;
-import ua.project.calculator.files.libs.parsers.VariableParser;
+import ua.project.calculator.files.libs.parsers.impls.DataFileParser;
+import ua.project.calculator.files.libs.parsers.impls.VariableParser;
 import ua.project.calculator.files.libs.ClipboardIO;
 import ua.project.calculator.files.libs.CustomException;
 
@@ -45,6 +45,7 @@ public class Calculator {
     JMenuItem newCountingItem = new JMenuItem("New Counting");     // "Новый Подсчёт"
     JMenuItem countItem = new JMenuItem("Count");                  // "Подсчитать"
     JMenuItem viewHistoryItem = new JMenuItem("View History");     // "Просмотреть Историю"
+    JMenuItem exitWOSaveItem = new JMenuItem("Exit Without Save"); // "Выйти без сохраниния"
 
     //                                     > Режим <
     //          Радио-кнопка (переключатель) для выбора уровня математики
@@ -132,6 +133,7 @@ public class Calculator {
         fileMenu.add(viewHistoryItem);           // Кнопка "Просмотреть Историю"
         fileMenu.addSeparator();
         fileMenu.add(exitItem);                  // Кнопка "Выход"
+        fileMenu.add(exitWOSaveItem);            // Кнопка "Выйти без сохраниния"
 
         exitItem.addActionListener(e -> exit());      // При нажатии на кнопку "Выход",
         //                                                       Выходим с кодом "0"
@@ -147,6 +149,39 @@ public class Calculator {
 
         viewHistoryItem.addActionListener(e -> JCalculatorDialogs.historyViewingDialog(this));    // При нажатии на кнопку "Просмотреть Историю",
         //                                                                                           Включаем диалог просмотра
+
+        exitWOSaveItem.addActionListener(e -> {            // При нажатии на кнопку "Выйти без сохраниния",
+            //                                                Запрашиваем что не надо сохранять
+
+            // Диалог используется не обычный, поэтому надо создать панель с его содержимым
+            JPanel dialogPanel = new JPanel(new GridLayout(4, 1));
+
+            JLabel label = new JLabel("Select features you would like to not save on exit:");
+            label.setFont(JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+            dialogPanel.add(label);
+
+            dialogPanel.add(new JLabel(""));
+
+            JCheckBox variablesCheck = new JCheckBox("Variables");
+            variablesCheck.setFont(JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+            dialogPanel.add(variablesCheck);
+
+            JCheckBox historyCheck = new JCheckBox("History");
+            historyCheck.setFont(JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+            dialogPanel.add(historyCheck);
+
+            // Показываем диалог. Ответы по сохранению считываются потом
+            boolean thenExit = JOptionPane.showConfirmDialog(null, dialogPanel, "What you would like to not save?", JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.CANCEL_OPTION;
+            if (thenExit) return;      // Если выбрали "Отмена", выходим из метода
+
+            // После того как всё запрошено - можно приступить к делу
+            exit(!variablesCheck.isSelected(), !historyCheck.isSelected());
+
+            System.exit(0);
+        });
+        exitWOSaveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, InputEvent.CTRL_MASK));
+        // Выход без сохранения на горячую клавишу Ctrl+Esc
 
         //                                      > Режим <
 
@@ -264,6 +299,7 @@ public class Calculator {
         newCountingItem.setFont(ITEM_FONT); // Кнопка "Новый Подсчёт"
         countItem.setFont(ITEM_FONT);       // Кнопка "Подсчёт"
         viewHistoryItem.setFont(ITEM_FONT); // Кнопка "Просмотреть Историю"
+        exitWOSaveItem.setFont(ITEM_FONT);  // Кнопка "Выйти без сохраниния"
 
         modeMenu.setFont(MENU_FONT);        // Меню "Режим"
         simpleMath.setFont(ITEM_FONT);      // Кнопка-Режим "Простая Математика"
@@ -620,58 +656,78 @@ public class Calculator {
      * @see Calculator#saveHistory()
      */
     public void exit() {
-        try {
-            saveVariables();      // Сохранение переменных
+        exit(true, true);
+    }
 
-        } catch (CustomException e1) {      // Если возникла ошибка во время записи,
-            String fullMessage = e1.getMessage();                                                               // Получение текста исключения
-            String nameOfException = fullMessage.substring(0, fullMessage.indexOf("#"));                        // Имя ошибки
-            String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());   // Описание ошибки
+    /** <h1><b>======= Метод для правильного выхода =======</b></h1>
+     * <p>При выходе из программы надо сохранить известные переменные,
+     * а также, так как не возникло никаких ошибок - выходим с кодом выхода "0".
+     * Если файла не сыществует - сообщает об ошибке, и спрашивает:
+     * "Выйти без сохранения или создать этот файл?".</p>
+     *
+     * @param saveVariables сохранять ли переменные? Используется при выходе без сохранения.
+     * @param saveHistory сохранять ли историю? Используется при выходе без сохранения.
+     *
+     * @see Calculator#saveVariables()
+     * @see Calculator#saveHistory()
+     */
+    public void exit(boolean saveVariables, boolean saveHistory) {
+        if (saveVariables) {
+            try {
+                saveVariables();      // Сохранение переменных
 
-            //             Настройка шрифтов диалогового окна
-            UIManager.put("OptionPane.messageFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
-            UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+            } catch (CustomException e1) {      // Если возникла ошибка во время записи,
+                String fullMessage = e1.getMessage();                                                               // Получение текста исключения
+                String nameOfException = fullMessage.substring(0, fullMessage.indexOf("#"));                        // Имя ошибки
+                String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());   // Описание ошибки
 
-            Object[] options = {"Exit without save", "Create this file"};        // Возможные варианты ответа
-            // Создание диалога: заголовок = имя ошибки, текст = описание ошибки, иконка = ошибочная иконка, варианты = options,
-            // выбраный вариант = options[1] ("Создать этот файл")
-            int reply = JOptionPane.showOptionDialog(null, nameOfException, exceptionDesc, JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.ERROR_MESSAGE, null, options, options[1]);
-            //                               При первом варианте - игнорируем результат
-            if (reply == 1) {             // При втором варианте - создание файла и выход
+                //             Настройка шрифтов диалогового окна
+                UIManager.put("OptionPane.messageFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+                UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
 
-                try {
-                    new File("knownVariables.txt").createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                Object[] options = {"Exit without save", "Create this file"};        // Возможные варианты ответа
+                // Создание диалога: заголовок = имя ошибки, текст = описание ошибки, иконка = ошибочная иконка, варианты = options,
+                // выбраный вариант = options[1] ("Создать этот файл")
+                int reply = JOptionPane.showOptionDialog(null, nameOfException, exceptionDesc, JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.ERROR_MESSAGE, null, options, options[1]);
+                //                               При первом варианте - игнорируем результат
+                if (reply == 1) {             // При втором варианте - создание файла и выход
+
+                    try {
+                        new File("knownVariables.txt").createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
 
-        try {
-            saveHistory();      // Сохранение истории
+        if (saveHistory) {
+            try {
+                saveHistory();      // Сохранение истории
 
-        } catch (CustomException e1) {      // Если возникла ошибка во время записи,
-            String fullMessage = e1.getMessage();                                                               // Получение текста исключения
-            String nameOfException = fullMessage.substring(0, fullMessage.indexOf("#"));                        // Имя ошибки
-            String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());   // Описание ошибки
+            } catch (CustomException e1) {      // Если возникла ошибка во время записи,
+                String fullMessage = e1.getMessage();                                                               // Получение текста исключения
+                String nameOfException = fullMessage.substring(0, fullMessage.indexOf("#"));                        // Имя ошибки
+                String exceptionDesc = fullMessage.substring(fullMessage.indexOf("#") + 1, fullMessage.length());   // Описание ошибки
 
-            //             Настройка шрифтов диалогового окна
-            UIManager.put("OptionPane.messageFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
-            UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+                //             Настройка шрифтов диалогового окна
+                UIManager.put("OptionPane.messageFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
+                UIManager.put("OptionPane.buttonFont", JCalculatorDialogs.DIALOG_MESSAGE_FONT);
 
-            Object[] options = {"Exit without save", "Create this file"};        // Возможные варианты ответа
-            // Создание диалога: заголовок = имя ошибки, текст = описание ошибки, иконка = ошибочная иконка, варианты = options,
-            // выбраный вариант = options[1] ("Создать этот файл")
-            int reply = JOptionPane.showOptionDialog(null, nameOfException, exceptionDesc, JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.ERROR_MESSAGE, null, options, options[1]);
-            //                               При первом варианте - игнорируем результат
-            if (reply == 1) {             // При втором варианте - создание файла и выход
+                Object[] options = {"Exit without save", "Create this file"};        // Возможные варианты ответа
+                // Создание диалога: заголовок = имя ошибки, текст = описание ошибки, иконка = ошибочная иконка, варианты = options,
+                // выбраный вариант = options[1] ("Создать этот файл")
+                int reply = JOptionPane.showOptionDialog(null, nameOfException, exceptionDesc, JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.ERROR_MESSAGE, null, options, options[1]);
+                //                               При первом варианте - игнорируем результат
+                if (reply == 1) {             // При втором варианте - создание файла и выход
 
-                try {
-                    new File("history.txt").createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    try {
+                        new File("history.txt").createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

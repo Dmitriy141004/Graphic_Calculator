@@ -1,7 +1,7 @@
 package ua.project.calculator.files.classes;
 
 import ua.project.calculator.files.classes.objects.ExpressionInHistory;
-import ua.project.calculator.files.libs.parsers.ExpressionParser;
+import ua.project.calculator.files.libs.parsers.impls.ExpressionParser;
 import ua.project.calculator.files.libs.CustomException;
 import ua.project.calculator.files.libs.ArrayUtils;
 import ua.project.calculator.files.libs.StringUtils;
@@ -191,7 +191,7 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
             switch (clickedButtonLabel) {      // РЫЧАГ НА ЦИФРЫ И СПЕЦ. КНОПКИ/ЗНАКИ
 
                 case "\u2190":                 // Если "Backspace"
-                    char[] text = StringUtils.toCharArray(displayText);
+                    char[] text = displayText.toCharArray();
                     if (text.length > 1 && ArrayUtils.array_has(actionButtons, Character.toString(text[text.length - 2]))) {
                         for (int i = 0; i < 3; i++)
                             displayText = StringUtils.removeChar(displayText, displayText.length() - 1);

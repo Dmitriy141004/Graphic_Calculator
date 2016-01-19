@@ -1,8 +1,9 @@
-package ua.project.calculator.files.libs.parsers;
+package ua.project.calculator.files.libs.parsers.impls;
 
 import ua.project.calculator.files.classes.JCalculatorDialogs;
 import ua.project.calculator.files.libs.ArrayUtils;
 import ua.project.calculator.files.libs.CustomException;
+import ua.project.calculator.files.libs.parsers.AbstractVariableParser;
 
 import java.util.*;
 
@@ -38,7 +39,7 @@ import java.util.*;
  * @see VariableParser#processText(String, boolean)
  * @see VariableParser#searchNested(String)
  */
-public class VariableParser {
+public class VariableParser implements AbstractVariableParser {
 
     public Map<String, String> knownVariables = new HashMap<>();             // Колекция/HashMap с известными переменными (название -> значение)
     public static final char[] VARIABLE_STOPPER_CHARS = {'(', ' ', ')'};       // Символы, которые никак не относятся к переменным,

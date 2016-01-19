@@ -1,7 +1,0 @@
-text="1 + 1 = ",result="2",date="16-01-2016"
-text="5 + 5 = ",result="10",date="16-01-2016"
-text="12 + 12 = ",result="24",date="17-01-2016"
-text="12 + 2  = ",result="14",date="17-01-2016"
-text="12 + long_var",result="15",date="17-01-2016"
-text="14 + 42 = ",result="56",date="17-01-2016"
-text="12 + abc",result="14",date="17-01-2016"

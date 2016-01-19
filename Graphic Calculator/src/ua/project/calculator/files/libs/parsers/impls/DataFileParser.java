@@ -1,6 +1,6 @@
-package ua.project.calculator.files.libs.parsers;
+package ua.project.calculator.files.libs.parsers.impls;
 
-import ua.project.calculator.files.libs.StringUtils;
+import ua.project.calculator.files.libs.parsers.AbstractDataFileParser;
 
 import java.util.HashMap;
 
@@ -15,7 +15,7 @@ import java.util.HashMap;
  * @since 1.8.3
  * @see DataFileParser#parse(String)
  */
-public class DataFileParser {
+public class DataFileParser implements AbstractDataFileParser {
     /** <b><h1>======= Метод для поиска параметров и значений =======</h1></b>
      * <p>О принципе работы - у него есть переменная <tt>readingName</tt>, которая отвечает за чтение в
      * <tt>currentName (true)</tt> или <tt>currentValue (false)</tt>. В начале она будет <tt>true</tt>, когда главный

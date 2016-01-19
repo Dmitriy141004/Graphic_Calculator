@@ -1,13 +1,14 @@
-package ua.project.calculator.files.libs.parsers;
+package ua.project.calculator.files.libs.parsers.impls;
 
 import ua.project.calculator.files.libs.ArrayUtils;
 import ua.project.calculator.files.libs.StringUtils;
 import ua.project.calculator.files.libs.CustomException;
+import ua.project.calculator.files.libs.parsers.AbstractExpressionParser;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ExpressionParser {
+public class ExpressionParser implements AbstractExpressionParser {
 
     public double currentResult = 0;
     private double numberA = 0;
@@ -34,10 +35,10 @@ public class ExpressionParser {
         return out;
     }
 
-    public void calculate(String string) throws CustomException {
+    private void calculate(String string) throws CustomException {
         newCalculation();
         string = formatInput(string);
-        char[] workingText = StringUtils.toCharArray(string);
+        char[] workingText = string.toCharArray();
 
         for (int i = 0; i < workingText.length; i++) {
             char symbol = workingText[i];
@@ -149,7 +150,7 @@ public class ExpressionParser {
     }
 
     public String process(String text) throws CustomException {
-        char[] workingText = StringUtils.toCharArray(text);
+        char[] workingText = text.toCharArray();
 
         int opened = 0;
         int closed = 0;
@@ -178,7 +179,7 @@ public class ExpressionParser {
             String processingTextS = StringUtils.charAryToString(processingText) + " = ";
 
             if (processingTextS.contains("(") && processingTextS.contains(")")) {
-                processingText = StringUtils.toCharArray(process(processingTextS));
+                processingText = process(processingTextS).toCharArray();
                 for (int i = 0; i < 3; i++)
                     processingText = ArrayUtils.deleteItem(processingText, processingText.length - 1);
             }
