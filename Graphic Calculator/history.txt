@@ -1,0 +1,5 @@
+text="24547 + 172 * 467 = ",result="104871",date="30-01-2016"
+text="12 + (12 * 5 - 4) = ",result="68",date="30-01-2016"
+text="12 / 0 = ",result="Infinity",date="07-02-2016"
+text="12 + 5 / 0 = ",result="Infinity",date="07-02-2016"
+text="5 + 2 / 0 = ",result="Infinity",date="07-02-2016"

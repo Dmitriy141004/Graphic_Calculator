@@ -119,8 +119,6 @@ public class ExpressionParser implements AbstractExpressionParser {
 
                     String findingText = " " + StringUtils.charAryToString(workingText);
 
-                    System.out.println("\t\t\t<PRINTED> " + findingText + " </PRINTED>");
-
                     int indexOfMns = findingText.indexOf("-");
 
                     if (ary1_has_ary2(findingText.toCharArray(), actions)) {
@@ -169,8 +167,6 @@ public class ExpressionParser implements AbstractExpressionParser {
             prevOpened = opened;
         }
 
-        System.out.println("\t\t\t<PRINTED> " + text + " </PRINTED>");
-
         if (text.contains("(") && text.contains(")")) {
             start += 1;
             end -= 1;
@@ -202,8 +198,6 @@ public class ExpressionParser implements AbstractExpressionParser {
 
         } else {
             calculate(text);
-            System.out.print("\t\t\t<PRINTED> " + text);
-            System.out.println(currentResult + " </PRINTED>");
         }
 
         if (closed != opened) {

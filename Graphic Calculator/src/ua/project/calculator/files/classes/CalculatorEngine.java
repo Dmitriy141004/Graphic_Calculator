@@ -117,34 +117,14 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
             }
         }
 
-        System.out.println("<OUT>");
-        System.out.println("\t<COUNT>");
-        System.out.println("\t\t<PROCESS " + text + ">");
-
         try {
             math.process(text);                // Обработка выражения классом ExpressionParser
         } catch (CustomException ce1) {      // Если возникла ошибка (исключение)...
             handleCustomException(ce1);      // Обрабатываем её и сообщаем о ней
-
-            System.out.println("\t\t\t<PRINTED> ERROR </PRINTED>");
-            System.out.println("\t\t</PROCESS>");
-            System.out.println("\t\t<RESULT>");
-            System.out.println("\t\t\t<PRINTED> ERROR </PRINTED>");
-            System.out.println("\t\t</RESULT>");
-            System.out.println("\t</COUNT>");
-            System.out.println("</OUT>\n");
             return;                            // Выход из метода, чтоб не выполнять остального
         }
 
         //               Если всё пошло по плану...
-
-        System.out.println("\t\t</PROCESS>");
-        System.out.println("\t\t<RESULT>");
-        System.out.println("\t\t\t<PRINTED> " + math.currentResult + " </PRINTED>");
-        System.out.println("\t\t</RESULT>");
-        System.out.println("\t</COUNT>");
-        System.out.println("</OUT>");
-        System.out.print("\n");
 
         double currentResult = math.currentResult;          // Цифра с результатом
         // Этот код отвечает за то, что если число целое, не выводить в конце ".0"
@@ -155,6 +135,12 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
         history.add(new ExpressionInHistory(simplifiedResult, displayText, new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
 
         displayText = simplifiedResult;
+
+        // Проверка деления на ноль - Java возвращает "Infinity"
+        if (displayText.equals("Infinity")) {
+            handleCustomException(new CustomException("DivisionByZero Error", "You can\'t divide by zero in math rules!"));
+            return;
+        }
 
         newCounting(displayText);            // Загрузка результата в Text Field
     }
@@ -205,7 +191,6 @@ public class CalculatorEngine implements ActionListener, FocusListener {    // "
                     if (resultCounted) memory = parent.displayField.getText();
                     newCounting("");
                     needToFormat = false;
-                    System.out.println(memory);
                     break;
 
                 case "M-":                 // Если "M-" (Запись в память по формуле "0 - результат", или " '-' + 'результат' ")
