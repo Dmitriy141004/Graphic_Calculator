@@ -144,6 +144,8 @@ public class JCalculatorDialogs {
                 }
             }
         });
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(screenSize.width / 2 - frame.getSize().width / 2, screenSize.height / 2 - frame.getSize().width/ 2 );
 
         okButton.addActionListener(e -> {
             nameField.setText(nameField.getText().trim());
@@ -270,6 +272,8 @@ public class JCalculatorDialogs {
                 okButton.getActionListeners()[0].actionPerformed(e);
             }
         });
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(screenSize.width / 2 - frame.getSize().width / 2, screenSize.height / 2 - frame.getSize().width/ 2 );
     }
 
     public static void changingDialog(Calculator calculator) {
@@ -358,6 +362,8 @@ public class JCalculatorDialogs {
                 }
             }
         });
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(screenSize.width / 2 - frame.getSize().width / 2, screenSize.height / 2 - frame.getSize().width/ 2 );
     }
 
     public static void viewingDialog(Calculator calculator) {
@@ -429,6 +435,8 @@ public class JCalculatorDialogs {
         frame.getRootPane().getActionMap().put("OK", new AbstractAction(){
             public void actionPerformed(ActionEvent e) { disposeFrame(frame, calculator); }
         });
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(screenSize.width / 2 - frame.getSize().width / 2, screenSize.height / 2 - frame.getSize().width/ 2 );
     }
 
     public static void historyViewingDialog(Calculator calculator) {
@@ -516,6 +524,8 @@ public class JCalculatorDialogs {
         frame.getRootPane().getActionMap().put("OK", new AbstractAction(){
             public void actionPerformed(ActionEvent e) { disposeFrame(frame, calculator); }
         });
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(screenSize.width / 2 - frame.getSize().width / 2, screenSize.height / 2 - frame.getSize().width/ 2 );
     }
 
     private static class ToggleableSelection extends DefaultListSelectionModel {

@@ -426,6 +426,9 @@ public class Calculator {
                 exit();
             }
         });
+        // Отцентрирование окна
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(screenSize.width / 2 - frame.getSize().width / 2, screenSize.height / 2 - frame.getSize().width/ 2 );
 
         frame.setTitle("Calculator");               // Установка названия окна (это в рядке заголовка)
         frame.setResizable(false);                  // И теперь, окно нельзя увеличить или уменьшить
